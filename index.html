@@ -3,11 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hyper Vite Starter</title>
+    <link rel="stylesheet" href="./style.css" />
+    <title>Hyper Chirp</title>
   </head>
   <body>
     <main>
-      <h1 id="title"></h1>
+      <h1 id="heading"></h1>
+      <div class="status-message">
+        <p class="status-text"></p>
+      </div>
+      <div id="chirps-container"></div>
+      <button id="reload-btn"></button>
     </main>
     <script type="module" src="./main.js"></script>
   </body>
