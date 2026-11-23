@@ -4,10 +4,12 @@ const reloadBtn = document.querySelector("#reload-btn");
 const chirpsContainer = document.querySelector("#chirps-container");
 
 title.textContent = "Hyper Chirp API";
-reloadBtn.textContent = "Reload";
+reloadBtn.textContent = "Load more";
+
+let limit = 10;
 
 async function getChirps() {
-  const url = "https://hyperchirp.vercel.app/api/chirps?limit=10";
+  const url = `https://hyperchirp.vercel.app/api/chirps?limit=${limit}`;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("HTTP " + response.status);
@@ -23,11 +25,15 @@ async function getChirps() {
 async function showChirps() {
   statusMsg.textContent = "Loading...";
   const chirps = await getChirps();
-  statusMsg.textContent = `Loaded ${chirps.length} chirps`;
+  statusMsg.textContent = `Success! Loaded ${chirps.length} chirps`;
+  if (chirps.length < limit) {
+    reloadBtn.textContent = "All chirps loaded";
+    reloadBtn.disabled = true;
+  }
 
   chirpsContainer.innerHTML = "";
   if (!chirps.length) {
-    chirpsContainer.textContent = "No chirps found";
+    chirpsContainer.textContent = "Error: No chirps found";
     return;
   }
 
@@ -46,9 +52,9 @@ function createChirpCard(chirp) {
   const author = document.createElement("p");
   author.classList.add("chirp-author");
   if (chirp.is_anonymous == true) {
-    author.textContent = "chirpped by an anonymous user";
+    author.textContent = "Chirpped by an anonymous user";
   } else {
-    author.textContent = `chirpped by ${chirp.author_name || "Unknown"}`;
+    author.textContent = `Chirpped by ${chirp.author_name || "Unknown"}`;
   }
 
   card.append(content, author);
@@ -56,3 +62,7 @@ function createChirpCard(chirp) {
 }
 
 showChirps();
+reloadBtn.addEventListener("click", () => {
+  limit += 15;
+  showChirps();
+});

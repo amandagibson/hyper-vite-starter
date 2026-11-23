@@ -79,3 +79,8 @@ main {
 #reload-btn:hover {
   border-color: var(--text-muted);
 }
+
+#reload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
