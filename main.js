@@ -63,6 +63,6 @@ function createChirpCard(chirp) {
 
 showChirps();
 reloadBtn.addEventListener("click", () => {
-  limit += 15;
+  limit += 10;
   showChirps();
 });
