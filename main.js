@@ -1,12 +1,9 @@
 const title = document.querySelector("#heading");
-const statusMsg = document.querySelector("#status-text");
+const statusMsg = document.querySelector(".status-text");
 const reloadBtn = document.querySelector("#reload-btn");
-const chirpContent = document.querySelector("#chirp-content");
-const chirpAuthor = document.querySelector("#chirp-author");
+const chirpsContainer = document.querySelector("#chirps-container");
 
 title.textContent = "Hyper Chirp API";
-statusMsg.textContent = "Loading...";
-// chirpCard.textContent = "Chirp Card";
 reloadBtn.textContent = "Reload";
 
 async function getChirps() {
@@ -26,9 +23,36 @@ async function getChirps() {
 async function showChirps() {
   statusMsg.textContent = "Loading...";
   const chirps = await getChirps();
-  statusMsg.textContent = "Loaded " + chirps.length + " chirps";
-  chirpContent.textContent = chirps[0]?.content || "No chirps found";
-  chirpAuthor.textContent = `chirpped by ${chirps[0]?.author_name || "Unknown"}`;
+  statusMsg.textContent = `Loaded ${chirps.length} chirps`;
+
+  chirpsContainer.innerHTML = "";
+  if (!chirps.length) {
+    chirpsContainer.textContent = "No chirps found";
+    return;
+  }
+
+  const cards = chirps.map((chirp) => createChirpCard(chirp));
+  chirpsContainer.append(...cards);
+}
+
+function createChirpCard(chirp) {
+  const card = document.createElement("div");
+  card.classList.add("chirp-card");
+
+  const content = document.createElement("p");
+  content.classList.add("chirp-content");
+  content.textContent = chirp.content;
+
+  const author = document.createElement("p");
+  author.classList.add("chirp-author");
+  if (chirp.is_anonymous == true) {
+    author.textContent = "chirpped by an anonymous user";
+  } else {
+    author.textContent = `chirpped by ${chirp.author_name || "Unknown"}`;
+  }
+
+  card.append(content, author);
+  return card;
 }
 
 showChirps();
